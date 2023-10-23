@@ -8,20 +8,18 @@ use PDO;
 
 class Db
 {
-	//use TSingleton;
+public $connection;
+protected static $instance;
+public static $countSql = 0;
+public static $queries = [];
 
-	public $connection;
-	protected static $instance;
-	public static $countSql = 0;
-	public static $queries = [];
-
-	public function __construct()
-	{
-		$db = require_once ROOT . '/config/config_db.php';
-		$options = [
+public function __construct()
+{
+	$db = require_once ROOT . '/config/config_db.php';
+	$options = [
 			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 			\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION,
+            		\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION,
 		];
 
         try
@@ -33,23 +31,20 @@ class Db
         {
             dd("ERROR: {$exception->getMessage()}");
         }
-		
-		//$this->pdo = new \PDO($db['dsn'], $db['user'], $db['pass']);
-	}
+}
 
-    public static function instance()
+public static function instance()
+{
+    if (self::$instance === null) 
     {
-        if (self::$instance === null) {
-            self::$instance = new self;
-        }
+       self::$instance = new self;
+    }
 
         return self::$instance;
     }
 
     public function execute($sql, $params = []): array
     {
-        //self::$countSql++;
-        //self::$queries[] = $sql;
         $stmt = $this->connection->prepare($sql);
 
         return $stmt->execute($params);
@@ -57,8 +52,6 @@ class Db
 
     public function query($sql, $params = [])
     {
-        //self::$countSql++;
-        //self::$queries[] = $sql;
 
         $stmt = $this->connection->prepare($sql);
 
