@@ -12,9 +12,7 @@ abstract class Model
 
 	public function __construct()
 	{
-        $this->pdo = Db::instance();
-
-		//dd($this->pdo);		
+    		$this->pdo = Db::instance();	
 	}
 
 	public function query($sql)
@@ -22,13 +20,12 @@ abstract class Model
 		return $this->pdo->connection->execute($sql);
 	}
 
-    public function findAll()
-    {
-        $sql = "SELECT * FROM {$this->table}";
+	public function findAll()
+	{
+     		$sql = "SELECT * FROM {$this->table}";
 
-        return $this->pdo->query($sql);
-    }
-
+     		return $this->pdo->query($sql);
+	}
 
 	public function findOne($id, $field = '')
 	{
@@ -37,20 +34,6 @@ abstract class Model
 		$sql = "SELECT * FROM {$this->table} WHERE $field = ? LIMIT 1";
 
 		return $this->pdo->query($sql, [$id]);
-	}
-	
-/*
-	public function findBySql($sql, $params = [])
-	{
-		return $this->pdo->query($sql, $params);
-	}
+	}	
 
-	public function findByLike($str, $field, $table = '')
-	{
-		$table = $table ?: $this->table;
-
-		$sql = "SELECT * FROM $table WHERE $field LIKE ?";
-
-		return $this->pdo->query($sql, ['%' . $str . '%']);
-	}*/
 }
