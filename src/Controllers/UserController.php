@@ -12,27 +12,18 @@ class UserController extends Controller
     
     public function __construct($route)
     {
-        //$this->model = new User();
-
-        //dd($this->model);
 
         parent::__construct($route);
     }
     
     public function index()
     {
-        echo 'UserController<br>';
-        //var_dump(__METHOD__);
 
         dd($this->route);
     }
 
     public function login(): void
     {
-        //echo 'UserController<br>';
-        //var_dump(__METHOD__);
-        //$this->set(compact('title', 'tickets'));
-        //dd($this->view,0);
         $this->getView();
     }
 
@@ -56,7 +47,7 @@ class UserController extends Controller
                 $this->view = 'login';
 
                 $this->set($error['loginError']);
-                //dd($error['loginError']);
+
             }
             else
             {
@@ -74,8 +65,6 @@ class UserController extends Controller
                 $this->route['action'] = '';
 
                 $this->view = 'index';
-
-                //$this->getView();  
 
                 header('Location: /');
             }
@@ -109,24 +98,11 @@ class UserController extends Controller
         $this->getView();
     }
     
-    public function register()
-    {
-        echo 'UserController<br>';
-        var_dump(__METHOD__);
-    }
-
-    public function register_process()
-    {
-        echo 'UserController<br>';
-        var_dump(__METHOD__);
-    }
-
     public function loginUser(array $data): object|bool
     {
         $this->model = new User();
 
         $user = $this->model->getUser($data);
-        //dd($user);
 
         return $user;
     }
