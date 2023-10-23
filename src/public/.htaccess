@@ -1,0 +1,17 @@
+AddDefaultCharset utf8
+
+  Options -Indexes
+  DirectoryIndex index.php
+
+
+  RewriteEngine On
+  Options +FollowSymlinks
+  RewriteBase /
+
+    # Если файл физически не найден
+  RewriteCond %{REQUEST_FILENAME} !-s
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  #RewriteRule ^(.*)/(.*)/([0-9]+)/?$ index.php?controller=$1&action=$2&id=$3 [L,QSA]
+
+ RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
