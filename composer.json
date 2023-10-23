@@ -1,0 +1,16 @@
+{
+    "name": "oleh/it-minsk",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Oleh\\ItMinsk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrei Olekh",
+            "email": "andr_vol@mail.ru"
+        }
+    ],
+    "require": {}
+}
