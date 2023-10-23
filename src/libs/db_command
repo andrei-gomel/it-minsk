@@ -1,0 +1,50 @@
+CREATE TABLE `albums` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `description` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+ALTER TABLE `albums` 
+ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `login` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `password` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `users` 
+(`id`, `name`, `login`, `email`, `password`) 
+VALUES 
+(NULL, 'Иван Петров', 'petrov', 'petrov@mail.ru', '96e79218965eb72c92a549dd5a330112'), 
+(NULL, 'Коля Сидоров', 'sidorov', 'sidorov@mail.ru', 'e3ceb5881a0a1fdaad01296d7554868d')
+
+CREATE TABLE `it-minsk`.`images` (
+    `id` INT NOT NULL AUTO_INCREMENT, 
+    `name` VARCHAR(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL , 
+    `description` VARCHAR(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL , 
+    `album_id` INT NOT NULL , 
+    `created_at` DATETIME NOT NULL , 
+    `file_name` VARCHAR(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL , PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb3;
+
+ALTER TABLE `images` ADD FOREIGN KEY (`album_id`) REFERENCES `albums`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+CREATE TABLE `comments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `images_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `text` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `images_id` (`images_id`),
+  ADD KEY `user_id` (`user_id`);
+
+ALTER TABLE `comments` ADD FOREIGN KEY (`images_id`) REFERENCES `images`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT; ALTER TABLE `comments` ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
