@@ -15,7 +15,7 @@ class Comment extends Model
         $sql = "INSERT INTO `{$this->table}` SET `image_id` = :image_id, `user_id` = :user_id,
                 `text` = :text, `created_at` = :created_at";
 
-        $result = $this->pdo->connection->prepare($sql);
+        $result = $this->pdo->connect->prepare($sql);
 
         $result->bindParam(':image_id', $image_id, \PDO::PARAM_INT);
 
@@ -28,7 +28,7 @@ class Comment extends Model
         $result->execute();
 
         // Получаем id вставленной записи
-        $insert_id = $this->pdo->connection->lastInsertId();
+        $insert_id = $this->pdo->connect->lastInsertId();
 
         return $insert_id;
     }
@@ -40,7 +40,7 @@ class Comment extends Model
                 JOIN users ON {$this->table}.user_id = users.id 
                 WHERE {$this->table}.image_id = :id ORDER BY {$this->table}.id ASC";
 
-        $result = $this->pdo->connection->prepare($sql);
+        $result = $this->pdo->connect->prepare($sql);
 
         $result->bindParam(':id', $id, \PDO::PARAM_STR);
 
