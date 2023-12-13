@@ -17,7 +17,7 @@ class Image extends Model
         $sql = "INSERT INTO `{$this->table}` SET `name` = :name, `description` = :description,
                 `album_id` = :album_id, `created_at` = :created_at, `file_name` = :fileName";
 
-        $result = $this->pdo->connection->prepare($sql);
+        $result = $this->pdo->connect->prepare($sql);
 
         $result->bindParam(':name', $name, \PDO::PARAM_STR);
 
@@ -32,22 +32,19 @@ class Image extends Model
         $result->execute();
 
         // Получаем id вставленной записи
-        $insert_id = $this->pdo->connection->lastInsertId();
+        $insert_id = $this->pdo->connect->lastInsertId();
+
+        if ($insert_id === 0)
+            return false;
 
         return $insert_id;
     }
 
-    public function getImagesByIdAlbum(int $id): array
+    public function getImagesByIdAlbum(int $id): array|bool
     {
-        /*$sql2 = "SELECT images.id, images.name, images.description, images.album_id,  
-                DATE_FORMAT(images.created_at, '%d.%m.%Y %H:%i') as date, images.file_name, 
-                albums.name as album_name, albums.user_id
-                FROM images JOIN albums 
-                ON images.album_id=albums.id WHERE images.album_id = :id ORDER BY images.id ASC";*/
-
         $sql = "SELECT * FROM `{$this->table}` WHERE album_id = :id ORDER BY id ASC";
 
-        $result = $this->pdo->connection->prepare($sql);
+        $result = $this->pdo->connect->prepare($sql);
 
         $result->bindParam(':id', $id, \PDO::PARAM_INT);
 
@@ -55,10 +52,13 @@ class Image extends Model
 
         $array = $result->fetchAll();
 
+        if ($array === false)
+            return false;
+
         return $array;
     }
 
-    public function findOneWithAutor(int $id): array
+    public function findOneWithAutor(int $id): array|bool
     {
         $sql = "SELECT {$this->table}.id, {$this->table}.name, {$this->table}.description, {$this->table}.created_at, {$this->table}.file_name, 
                 albums.name as album_name, users.name as autor
@@ -67,7 +67,7 @@ class Image extends Model
                 JOIN users ON albums.user_id = users.id 
                 WHERE {$this->table}.id = :id";
 
-        $result = $this->pdo->connection->prepare($sql);
+        $result = $this->pdo->connect->prepare($sql);
 
         $result->bindParam(':id', $id, \PDO::PARAM_STR);
 
@@ -80,5 +80,4 @@ class Image extends Model
 
         return $array;
     }
-
 }
