@@ -8,51 +8,49 @@ use PDO;
 
 class Db
 {
-public $connection;
-protected static $instance;
-public static $countSql = 0;
-public static $queries = [];
+	public $connect;
 
-public function __construct()
-{
-	$db = require_once ROOT . '/config/config_db.php';
-	$options = [
+	protected static $instance;
+
+	public function __construct()
+	{
+		$db = require_once ROOT . '/config/config_db.php';
+
+		$options = [
 			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 			\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
 		];
 
         try
         {
-            $this->connection = new PDO($db['dsn'], $db['user'], $db['pass'], $options);
-
+            $this->connect = new PDO($db['dsn'], $db['user'], $db['pass'], $options);
         }
         catch(PDOException $exception)
         {
             dd("ERROR: {$exception->getMessage()}");
         }
-}
 
-public static function instance()
-{
-    if (self::$instance === null) 
+	}
+
+    public static function instance()
     {
-       self::$instance = new self;
-    }
+        if (self::$instance === null) {
+            self::$instance = new self;
+        }
 
         return self::$instance;
     }
 
-    public function execute($sql, $params = []): array
+    public function execute($sql, $params = []): array|bool
     {
-        $stmt = $this->connection->prepare($sql);
+        $stmt = $this->connect->prepare($sql);
 
         return $stmt->execute($params);
     }
 
     public function query($sql, $params = [])
     {
-
-        $stmt = $this->connection->prepare($sql);
+        $stmt = $this->connect->prepare($sql);
 
         $res = $stmt->execute($params);
 
