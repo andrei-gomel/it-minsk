@@ -3,12 +3,13 @@
 namespace Oleh\ItMinsk\Models;
 
 use Oleh\ItMinsk\core\base\Model;
+//use PDO;
 
 class Album extends Model
 {
     protected string $table = 'albums';
 
-    public function saveAlbum(string $name, string $description): bool|int
+    public function saveAlbum(string $name, string $description): int
     {
         $created_at = date('Y-m-d H:i:s');
 
@@ -17,7 +18,7 @@ class Album extends Model
         $sql = "INSERT INTO `{$this->table}` SET `name` = :name, `description` = :description,
                 `user_id` = :user_id, `created_at` = :created_at";
 
-        $result = $this->pdo->connection->prepare($sql);
+        $result = $this->pdo->connect->prepare($sql);
 
         $result->bindParam(':name', $name, \PDO::PARAM_STR);
 
@@ -30,12 +31,15 @@ class Album extends Model
         $result->execute();
 
         // Получаем id вставленной записи
-        $insert_id = $this->pdo->connection->lastInsertId();
+        $insert_id = $this->pdo->connect->lastInsertId();
+
+        if($insert_id === false)
+            return false;
 
         return $insert_id;
     }
 
-    public function getAlbumsWithAutor(): array
+    public function getAlbumsWithAutor(): array|bool
     {
         $sql = "SELECT id, name, created_at, 
             (SELECT name FROM users 
@@ -45,11 +49,7 @@ class Album extends Model
                 ORDER BY images.id ASC LIMIT 1) AS file_name 
             FROM {$this->table}";
 
-        $result = $this->pdo->connection->prepare($sql);
-
-        $result->execute();
-
-        $array = $result->fetchAll();
+        $array = $this->pdo->query($sql);
 
         if ($array === false)
             return false;
