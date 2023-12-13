@@ -7,7 +7,9 @@ use Oleh\ItMinsk\core\Db;
 abstract class Model
 {
 	public object $pdo;
+	
 	protected string $table;
+	
 	protected string $pk = 'id';
 
 	public function __construct()
@@ -17,7 +19,7 @@ abstract class Model
 
 	public function query($sql)
 	{
-		return $this->pdo->connection->execute($sql);
+		return $this->pdo->execute($sql);
 	}
 
 	public function findAll()
@@ -34,6 +36,5 @@ abstract class Model
 		$sql = "SELECT * FROM {$this->table} WHERE $field = ? LIMIT 1";
 
 		return $this->pdo->query($sql, [$id]);
-	}	
-
+	}
 }
