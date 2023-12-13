@@ -3,45 +3,42 @@
 namespace Oleh\ItMinsk\Models;
 
 use Oleh\ItMinsk\core\base\Model;
-use stdClass;
+use PDO;
 
 class User extends Model
 {
     public string $table = 'users';
 
-    protected ?string $login;
-
-    protected ?int $id;
-
-    public function __construct()
+    public function __set($name, $value)
     {
-        parent::__construct();
+        $this->$name = $value;
     }
     
     public function getUser(array $data): object|bool
     {
 
-        $sql = "SELECT * FROM {$this->table} 
-                WHERE email = :email AND password = :password";
+        $sql = "SELECT `id`, `login`, `name` FROM {$this->table} 
+                WHERE `email` = :email AND `password` = :password";
 
         $email = $data['email'];
         
         $password = $data['password'];
 
-        $result = $this->pdo->connection->prepare($sql);
+        $options = [
+            ':email' => $email,
+            ':password' => $password,
+        ];
 
-        $result->bindParam(':email', $email, \PDO::PARAM_STR);
+        $stmt = $this->pdo->connect->prepare($sql);
 
-        $result->bindParam(':password', $password, \PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Oleh\ItMinsk\Models\User');
 
-        $result->execute();
+        $stmt->execute($options);        
 
-        $array = (object)$result->fetch();
+        $array = $stmt->fetch();
 
         if($array === false)
             return false;
-
-        $this->pdo->connection = null;
 
         return $array;
     }
