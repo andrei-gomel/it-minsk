@@ -12,13 +12,11 @@ class UserController extends Controller
     
     public function __construct($route)
     {
-
         parent::__construct($route);
     }
     
     public function index()
     {
-
         dd($this->route);
     }
 
@@ -33,7 +31,6 @@ class UserController extends Controller
 
         if(ValidateData::checkLoginParams($data))
         {
-
             $data['password'] = md5($data['password']);
 
             $user = $this->loginUser($data);
@@ -51,14 +48,12 @@ class UserController extends Controller
             }
             else
             {
-
                 if(isset($user->login))
                 {
                     $_SESSION['login'] = $user->login;
 
                     $_SESSION['id'] = $user->id;
-                }
-                
+                }                
 
                 $this->route['controller'] = 'main';
 
@@ -67,9 +62,7 @@ class UserController extends Controller
                 $this->view = 'index';
 
                 header('Location: /');
-            }
-
-                     
+            }                     
         }
         else
         {
@@ -100,8 +93,6 @@ class UserController extends Controller
     
     public function loginUser(array $data): object|bool
     {
-        $this->model = new User();
-
         $user = $this->model->getUser($data);
 
         return $user;
