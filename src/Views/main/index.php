@@ -54,8 +54,8 @@
 
                 <?php
 
-                    foreach ($albums as $item) {                        
-
+                    foreach ($albums as $item) 
+                    {
                         echo '<div class="col">';
                         if($item['file_name'] === NULL)
                         {
