@@ -1,4 +1,4 @@
-# it-minsk
+# Фотогалерея
 ## Тестовое задание для it-minsk на PHP, MySQL
 1. Дамп БД в файле Models/it-minsk.sql
 2. Пароли для пользователей: petrov@mail.ru ( 111111 ), sidorov@mail.ru ( 222222 )
